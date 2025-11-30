@@ -1,6 +1,6 @@
 # Trackme
 
-Trackme is a React Native mobile app that helps you stay on top of your life by tracking everything that matters—your tasks, events, diet, exercise, and health vitals. It connects to Apple HealthKit to pull in real health data like steps and heart rate, then uses AI to give you personalized suggestions based on your habits and goals.
+Trackme is a React Native mobile app that helps you stay on top of your life by tracking everything that matters such as your tasks, events, diet, exercise, and health vitals. It connects to Apple HealthKit to pull in real health data like steps and heart rate, then uses AI to give you personalized suggestions based on your habits and goals.
 
 When you log meals, the app automatically looks up nutrition information so you don't have to. It analyzes your activity patterns and gives you helpful nudges when you're falling behind on your goals or could use a boost.
 
