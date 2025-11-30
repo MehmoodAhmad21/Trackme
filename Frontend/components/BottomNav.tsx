@@ -1,4 +1,5 @@
-import { Home, Calendar, Activity, Lightbulb, User } from 'lucide-react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Home, Calendar, Activity, Lightbulb, User } from 'lucide-react-native';
 import type { Screen } from '../App';
 
 interface BottomNavProps {
@@ -16,30 +17,63 @@ export function BottomNav({ activeTab, onNavigate }: BottomNavProps) {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 pb-6 pt-2">
-      <div className="flex items-center justify-around">
+    <View style={styles.container}>
+      <View style={styles.tabsContainer}>
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           
           return (
-            <button
+            <TouchableOpacity
               key={tab.id}
-              onClick={() => onNavigate(tab.id)}
-              className="flex flex-col items-center gap-1 px-4 py-2 min-w-[60px] transition-colors"
+              onPress={() => onNavigate(tab.id)}
+              style={styles.tab}
+              activeOpacity={0.7}
             >
               <Icon 
                 size={24} 
-                className={isActive ? 'text-teal-500' : 'text-gray-400'}
+                color={isActive ? '#14b8a6' : '#9ca3af'}
                 strokeWidth={isActive ? 2.5 : 2}
               />
-              <span className={`text-xs ${isActive ? 'text-teal-500' : 'text-gray-500'}`}>
+              <Text style={[styles.label, isActive && styles.labelActive]}>
                 {tab.label}
-              </span>
-            </button>
+              </Text>
+            </TouchableOpacity>
           );
         })}
-      </div>
-    </div>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    paddingHorizontal: 8,
+    paddingBottom: 24,
+    paddingTop: 8,
+  },
+  tabsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  tab: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    minWidth: 60,
+  },
+  label: {
+    fontSize: 12,
+    color: '#6b7280',
+  },
+  labelActive: {
+    color: '#14b8a6',
+    fontWeight: '600',
+  },
+});

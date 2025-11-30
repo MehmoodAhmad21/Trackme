@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Trackme",
+    "slug": "trackme",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.trackme.app"
+    },
+    "android": {
+      "package": "com.trackme.app"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
+

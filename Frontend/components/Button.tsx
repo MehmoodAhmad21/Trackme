@@ -1,25 +1,61 @@
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+
 interface ButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onPress?: () => void;
   variant?: 'primary' | 'secondary' | 'text';
-  className?: string;
+  style?: any;
 }
 
-export function Button({ children, onClick, variant = 'primary', className = '' }: ButtonProps) {
-  const baseClasses = 'px-6 py-3.5 rounded-2xl transition-all active:scale-95';
-  
-  const variantClasses = {
-    primary: 'bg-teal-500 text-white shadow-sm',
-    secondary: 'bg-white text-teal-600 border-2 border-teal-500',
-    text: 'bg-transparent text-teal-600',
-  };
-
+export function Button({ children, onPress, variant = 'primary', style }: ButtonProps) {
   return (
-    <button
-      onClick={onClick}
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.base, variant === 'text' ? styles.textVariant : styles[variant], style]}
+      activeOpacity={0.8}
     >
-      {children}
-    </button>
+      <Text style={[styles.text, styles[`${variant}Text`]]}>
+        {children}
+      </Text>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  base: {
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primary: {
+    backgroundColor: '#14b8a6',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  secondary: {
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderColor: '#14b8a6',
+  },
+  textVariant: {
+    backgroundColor: 'transparent',
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  primaryText: {
+    color: '#fff',
+  },
+  secondaryText: {
+    color: '#14b8a6',
+  },
+  textText: {
+    color: '#14b8a6',
+  },
+});

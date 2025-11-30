@@ -1,3 +1,5 @@
+import { View, Text, StyleSheet } from 'react-native';
+
 interface EventItemProps {
   title: string;
   time: string;
@@ -5,23 +7,60 @@ interface EventItemProps {
   color?: string;
 }
 
+const colorMap: Record<string, string> = {
+  teal: '#ccfbf1',
+  blue: '#dbeafe',
+  purple: '#e9d5ff',
+  red: '#fee2e2',
+};
+
 export function EventItem({ title, time, location, color = 'teal' }: EventItemProps) {
-  const colorClasses = {
-    teal: 'bg-teal-50 border-teal-100',
-    blue: 'bg-blue-50 border-blue-100',
-    purple: 'bg-purple-50 border-purple-100',
-    red: 'bg-red-50 border-red-100',
-  };
+  const bgColor = colorMap[color] || colorMap.teal;
 
   return (
-    <div className="flex gap-3 items-start">
-      <div className="text-center min-w-[60px] pt-1">
-        <p className="text-teal-500">{time}</p>
-      </div>
-      <div className={`flex-1 p-3 rounded-2xl border ${colorClasses[color as keyof typeof colorClasses] || colorClasses.teal}`}>
-        <p className="text-gray-900 mb-1">{title}</p>
-        {location && <p className="text-gray-600">{location}</p>}
-      </div>
-    </div>
+    <View style={styles.container}>
+      <View style={styles.timeContainer}>
+        <Text style={styles.time}>{time}</Text>
+      </View>
+      <View style={[styles.content, { backgroundColor: bgColor }]}>
+        <Text style={styles.title}>{title}</Text>
+        {location && <Text style={styles.location}>{location}</Text>}
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'flex-start',
+  },
+  timeContainer: {
+    minWidth: 60,
+    paddingTop: 4,
+  },
+  time: {
+    textAlign: 'center',
+    color: '#14b8a6',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  content: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#f3f4f6',
+  },
+  title: {
+    color: '#111827',
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  location: {
+    color: '#6b7280',
+    fontSize: 13,
+  },
+});

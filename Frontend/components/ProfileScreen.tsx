@@ -1,4 +1,5 @@
-import { ChevronRight, Target, Smartphone, Bell, FileText, LogOut, User } from 'lucide-react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { ChevronRight, Target, Smartphone, Bell, FileText, LogOut, User } from 'lucide-react-native';
 import { BottomNav } from './BottomNav';
 import type { Screen } from '../App';
 
@@ -9,177 +10,332 @@ interface ProfileScreenProps {
 
 export function ProfileScreen({ onNavigate, onLogout }: ProfileScreenProps) {
   return (
-    <div className="h-full bg-gray-50 pb-24">
-      {/* Header */}
-      <div className="bg-white px-6 pt-14 pb-6">
-        <h1 className="text-gray-900 mb-6">Profile</h1>
+    <View style={styles.container}>
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Profile</Text>
 
-        {/* User Info */}
-        <div className="flex items-center gap-4">
-          <div className="w-20 h-20 bg-gradient-to-br from-teal-500 to-blue-500 rounded-3xl flex items-center justify-center">
-            <User size={36} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <h2 className="text-gray-900 mb-1">Sarah Johnson</h2>
-            <p className="text-gray-600">sarah.j@email.com</p>
-          </div>
-          <button className="text-teal-500">Edit</button>
-        </div>
-      </div>
+          {/* User Info */}
+          <View style={styles.userInfo}>
+            <View style={styles.avatar}>
+              <User size={36} color="#fff" />
+            </View>
+            <View style={styles.userDetails}>
+              <Text style={styles.userName}>Sarah Johnson</Text>
+              <Text style={styles.userEmail}>sarah.j@email.com</Text>
+            </View>
+            <TouchableOpacity>
+              <Text style={styles.editButton}>Edit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      <div className="px-6 py-6 space-y-6">
-        {/* Goals Section */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
-              <Target size={20} className="text-teal-500" />
-            </div>
-            <h3 className="text-gray-900">Daily Goals</h3>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="text-gray-900 mb-1">Step Goal</p>
-                <p className="text-gray-500">Daily target</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-900">8,000</span>
-                <ChevronRight size={20} className="text-gray-400" />
-              </div>
-            </div>
+        <View style={styles.content}>
+          {/* Goals Section */}
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconContainer, { backgroundColor: '#ccfbf1' }]}>
+                <Target size={20} color="#14b8a6" />
+              </View>
+              <Text style={styles.cardTitle}>Daily Goals</Text>
+            </View>
+            
+            <View style={styles.list}>
+              <View style={[styles.listItem, styles.listItemBorder]}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Step Goal</Text>
+                  <Text style={styles.listItemSubtitle}>Daily target</Text>
+                </View>
+                <View style={styles.listItemRight}>
+                  <Text style={styles.listItemValue}>8,000</Text>
+                  <ChevronRight size={20} color="#9ca3af" />
+                </View>
+              </View>
 
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="text-gray-900 mb-1">Calorie Target</p>
-                <p className="text-gray-500">Daily intake</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-900">2,000 kcal</span>
-                <ChevronRight size={20} className="text-gray-400" />
-              </div>
-            </div>
+              <View style={[styles.listItem, styles.listItemBorder]}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Calorie Target</Text>
+                  <Text style={styles.listItemSubtitle}>Daily intake</Text>
+                </View>
+                <View style={styles.listItemRight}>
+                  <Text style={styles.listItemValue}>2,000 kcal</Text>
+                  <ChevronRight size={20} color="#9ca3af" />
+                </View>
+              </View>
 
-            <div className="flex items-center justify-between py-3">
-              <div>
-                <p className="text-gray-900 mb-1">Sleep Goal</p>
-                <p className="text-gray-500">Nightly target</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-900">8 hours</span>
-                <ChevronRight size={20} className="text-gray-400" />
-              </div>
-            </div>
-          </div>
-        </div>
+              <View style={styles.listItem}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Sleep Goal</Text>
+                  <Text style={styles.listItemSubtitle}>Nightly target</Text>
+                </View>
+                <View style={styles.listItemRight}>
+                  <Text style={styles.listItemValue}>8 hours</Text>
+                  <ChevronRight size={20} color="#9ca3af" />
+                </View>
+              </View>
+            </View>
+          </View>
 
-        {/* Connected Apps */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-              <Smartphone size={20} className="text-blue-500" />
-            </div>
-            <h3 className="text-gray-900">Connected Apps & Devices</h3>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="text-gray-900 mb-1">Apple Health</p>
-                <p className="text-green-600">Connected</p>
-              </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </div>
+          {/* Connected Apps */}
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconContainer, { backgroundColor: '#dbeafe' }]}>
+                <Smartphone size={20} color="#3b82f6" />
+              </View>
+              <Text style={styles.cardTitle}>Connected Apps & Devices</Text>
+            </View>
+            
+            <View style={styles.list}>
+              <View style={[styles.listItem, styles.listItemBorder]}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Apple Health</Text>
+                  <Text style={[styles.listItemSubtitle, { color: '#10b981' }]}>Connected</Text>
+                </View>
+                <ChevronRight size={20} color="#9ca3af" />
+              </View>
 
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="text-gray-900 mb-1">Google Fit</p>
-                <p className="text-gray-400">Not connected</p>
-              </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </div>
+              <View style={[styles.listItem, styles.listItemBorder]}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Google Fit</Text>
+                  <Text style={styles.listItemSubtitle}>Not connected</Text>
+                </View>
+                <ChevronRight size={20} color="#9ca3af" />
+              </View>
 
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="text-gray-900 mb-1">Fitness Tracker</p>
-                <p className="text-green-600">Connected</p>
-              </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </div>
+              <View style={[styles.listItem, styles.listItemBorder]}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Fitness Tracker</Text>
+                  <Text style={[styles.listItemSubtitle, { color: '#10b981' }]}>Connected</Text>
+                </View>
+                <ChevronRight size={20} color="#9ca3af" />
+              </View>
 
-            <div className="flex items-center justify-between py-3">
-              <div>
-                <p className="text-gray-900 mb-1">Glucose Monitor</p>
-                <p className="text-green-600">Connected</p>
-              </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </div>
-          </div>
-        </div>
+              <View style={styles.listItem}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Glucose Monitor</Text>
+                  <Text style={[styles.listItemSubtitle, { color: '#10b981' }]}>Connected</Text>
+                </View>
+                <ChevronRight size={20} color="#9ca3af" />
+              </View>
+            </View>
+          </View>
 
-        {/* Notifications */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-              <Bell size={20} className="text-purple-500" />
-            </div>
-            <h3 className="text-gray-900">Notifications</h3>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="text-gray-900 mb-1">Meal Reminders</p>
-                <p className="text-gray-500">Breakfast, lunch, dinner</p>
-              </div>
-              <div className="w-12 h-7 bg-teal-500 rounded-full p-1 flex items-center justify-end">
-                <div className="w-5 h-5 bg-white rounded-full" />
-              </div>
-            </div>
+          {/* Notifications */}
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconContainer, { backgroundColor: '#e9d5ff' }]}>
+                <Bell size={20} color="#a855f7" />
+              </View>
+              <Text style={styles.cardTitle}>Notifications</Text>
+            </View>
+            
+            <View style={styles.list}>
+              <View style={[styles.listItem, styles.listItemBorder]}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Meal Reminders</Text>
+                  <Text style={styles.listItemSubtitle}>Breakfast, lunch, dinner</Text>
+                </View>
+                <View style={[styles.toggle, styles.toggleOn]}>
+                  <View style={styles.toggleKnob} />
+                </View>
+              </View>
 
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="text-gray-900 mb-1">Step Reminders</p>
-                <p className="text-gray-500">Hourly activity nudges</p>
-              </div>
-              <div className="w-12 h-7 bg-teal-500 rounded-full p-1 flex items-center justify-end">
-                <div className="w-5 h-5 bg-white rounded-full" />
-              </div>
-            </div>
+              <View style={[styles.listItem, styles.listItemBorder]}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Step Reminders</Text>
+                  <Text style={styles.listItemSubtitle}>Hourly activity nudges</Text>
+                </View>
+                <View style={[styles.toggle, styles.toggleOn]}>
+                  <View style={styles.toggleKnob} />
+                </View>
+              </View>
 
-            <div className="flex items-center justify-between py-3">
-              <div>
-                <p className="text-gray-900 mb-1">Event Reminders</p>
-                <p className="text-gray-500">Upcoming tasks & events</p>
-              </div>
-              <div className="w-12 h-7 bg-gray-200 rounded-full p-1 flex items-center justify-start">
-                <div className="w-5 h-5 bg-white rounded-full" />
-              </div>
-            </div>
-          </div>
-        </div>
+              <View style={styles.listItem}>
+                <View style={styles.listItemContent}>
+                  <Text style={styles.listItemTitle}>Event Reminders</Text>
+                  <Text style={styles.listItemSubtitle}>Upcoming tasks & events</Text>
+                </View>
+                <View style={[styles.toggle, styles.toggleOff]}>
+                  <View style={styles.toggleKnob} />
+                </View>
+              </View>
+            </View>
+          </View>
 
-        {/* Other Links */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <button className="flex items-center justify-between w-full py-3 border-b border-gray-100">
-            <div className="flex items-center gap-3">
-              <FileText size={20} className="text-gray-500" />
-              <span className="text-gray-900">Privacy Policy</span>
-            </div>
-            <ChevronRight size={20} className="text-gray-400" />
-          </button>
+          {/* Other Links */}
+          <View style={styles.card}>
+            <TouchableOpacity style={[styles.listItem, styles.listItemBorder]}>
+              <View style={styles.linkContent}>
+                <FileText size={20} color="#6b7280" />
+                <Text style={styles.listItemTitle}>Privacy Policy</Text>
+              </View>
+              <ChevronRight size={20} color="#9ca3af" />
+            </TouchableOpacity>
 
-          <button
-            onClick={onLogout}
-            className="flex items-center gap-3 w-full py-3 mt-2"
-          >
-            <LogOut size={20} className="text-red-500" />
-            <span className="text-red-500">Log out</span>
-          </button>
-        </div>
-      </div>
+            <TouchableOpacity
+              onPress={onLogout}
+              style={[styles.listItem, { paddingTop: 8 }]}
+            >
+              <View style={styles.linkContent}>
+                <LogOut size={20} color="#ef4444" />
+                <Text style={[styles.listItemTitle, { color: '#ef4444' }]}>Log out</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
 
       <BottomNav activeTab="profile" onNavigate={onNavigate} />
-    </div>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f9fafb',
+  },
+  scroll: {
+    flex: 1,
+  },
+  header: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 24,
+    paddingTop: 56,
+    paddingBottom: 24,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 24,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 24,
+    backgroundColor: '#14b8a6',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  userDetails: {
+    flex: 1,
+  },
+  userName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  userEmail: {
+    fontSize: 15,
+    color: '#6b7280',
+  },
+  editButton: {
+    color: '#14b8a6',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  content: {
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    gap: 24,
+    paddingBottom: 120,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 16,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  list: {
+    gap: 0,
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+  },
+  listItemBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f4f6',
+  },
+  listItemContent: {
+    flex: 1,
+  },
+  listItemTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  listItemSubtitle: {
+    fontSize: 13,
+    color: '#6b7280',
+  },
+  listItemRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  listItemValue: {
+    fontSize: 15,
+    color: '#111827',
+  },
+  toggle: {
+    width: 48,
+    height: 28,
+    borderRadius: 14,
+    padding: 4,
+  },
+  toggleOn: {
+    backgroundColor: '#14b8a6',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+  },
+  toggleOff: {
+    backgroundColor: '#d1d5db',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+  },
+  toggleKnob: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+  },
+  linkContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+});

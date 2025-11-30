@@ -1,3 +1,5 @@
+import { View, Text, StyleSheet } from 'react-native';
+
 interface MetricCardProps {
   label: string;
   value: string;
@@ -7,31 +9,94 @@ interface MetricCardProps {
   progress?: number;
 }
 
-export function MetricCard({ label, value, target, icon, color = 'teal', progress }: MetricCardProps) {
+export function MetricCard({ label, value, target, icon, color = '#14b8a6', progress }: MetricCardProps) {
   return (
-    <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 min-w-[160px]">
-      <div className="flex items-start justify-between mb-3">
-        <div className={`w-10 h-10 rounded-xl bg-${color}-100 flex items-center justify-center`}>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
           {icon}
-        </div>
-      </div>
+        </View>
+      </View>
       
-      <div className="space-y-1">
-        <p className="text-gray-600">{label}</p>
-        <div className="flex items-baseline gap-1">
-          <span className="text-gray-900">{value}</span>
-          {target && <span className="text-gray-400">/ {target}</span>}
-        </div>
-      </div>
+      <View style={styles.content}>
+        <Text style={styles.label}>{label}</Text>
+        <View style={styles.valueContainer}>
+          <Text style={styles.value}>{value}</Text>
+          {target && <Text style={styles.target}>/ {target}</Text>}
+        </View>
+      </View>
 
       {progress !== undefined && (
-        <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className={`h-full bg-${color}-500 rounded-full transition-all`}
-            style={{ width: `${Math.min(progress, 100)}%` }}
+        <View style={styles.progressBar}>
+          <View
+            style={[
+              styles.progressFill,
+              { width: `${Math.min(progress, 100)}%`, backgroundColor: color }
+            ]}
           />
-        </div>
+        </View>
       )}
-    </div>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#f3f4f6',
+    minWidth: 160,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    gap: 4,
+  },
+  label: {
+    fontSize: 14,
+    color: '#6b7280',
+  },
+  valueContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 4,
+  },
+  value: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  target: {
+    fontSize: 16,
+    color: '#9ca3af',
+  },
+  progressBar: {
+    marginTop: 12,
+    height: 8,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 4,
+  },
+});

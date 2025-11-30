@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { View, SafeAreaView, StatusBar } from 'react-native';
 import { OnboardingScreen } from './components/OnboardingScreen';
 import { AuthScreen } from './components/AuthScreen';
 import { HomeScreen } from './components/HomeScreen';
@@ -35,17 +36,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      {/* Phone Frame */}
-      <div className="relative w-[390px] h-[844px] bg-white rounded-[3rem] shadow-2xl overflow-hidden border-8 border-gray-800">
-        {/* Phone Notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-6 bg-gray-800 rounded-b-2xl z-50" />
-        
-        {/* App Content */}
-        <div className="h-full overflow-auto bg-white">
-          {renderScreen()}
-        </div>
-      </div>
-    </div>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <StatusBar barStyle="dark-content" />
+      <View style={{ flex: 1 }}>
+        {renderScreen()}
+      </View>
+    </SafeAreaView>
   );
 }

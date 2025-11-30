@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Heart } from 'lucide-react';
+import { View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Heart } from 'lucide-react-native';
 import { Button } from './Button';
 import { InputField } from './InputField';
 
@@ -11,66 +12,138 @@ export function AuthScreen({ onLogin }: AuthScreenProps) {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="h-full flex flex-col bg-white px-8">
-      {/* Logo */}
-      <div className="flex flex-col items-center pt-20 mb-12">
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-teal-500 to-blue-500 flex items-center justify-center mb-4 shadow-lg">
-          <Heart size={40} className="text-white" strokeWidth={2} />
-        </div>
-        <h1 className="text-gray-900">Trackme</h1>
-        <p className="text-gray-600 mt-2">
-          {isLogin ? 'Welcome back' : 'Create your account'}
-        </p>
-      </div>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Logo */}
+        <View style={styles.header}>
+          <View style={styles.logoContainer}>
+            <Heart size={40} color="#fff" strokeWidth={2} />
+          </View>
+          <Text style={styles.title}>Trackme</Text>
+          <Text style={styles.subtitle}>
+            {isLogin ? 'Welcome back' : 'Create your account'}
+          </Text>
+        </View>
 
-      {/* Form */}
-      <div className="space-y-4 mb-6">
-        <InputField
-          type="email"
-          placeholder="Email"
-          label="Email"
-        />
-        <InputField
-          type="password"
-          placeholder="Password"
-          label="Password"
-        />
-        {!isLogin && (
+        {/* Form */}
+        <View style={styles.form}>
           <InputField
-            type="password"
-            placeholder="Confirm Password"
-            label="Confirm Password"
+            placeholder="Email"
+            label="Email"
+            keyboardType="email-address"
           />
+          <InputField
+            placeholder="Password"
+            label="Password"
+            secureTextEntry
+          />
+          {!isLogin && (
+            <InputField
+              placeholder="Confirm Password"
+              label="Confirm Password"
+              secureTextEntry
+            />
+          )}
+        </View>
+
+        {isLogin && (
+          <View style={styles.forgotPassword}>
+            <TouchableOpacity>
+              <Text style={styles.forgotPasswordText}>
+                Forgot password?
+              </Text>
+            </TouchableOpacity>
+          </View>
         )}
-      </div>
 
-      {isLogin && (
-        <div className="flex justify-end mb-8">
-          <button className="text-teal-600">
-            Forgot password?
-          </button>
-        </div>
-      )}
+        {/* Action Buttons */}
+        <View style={styles.actions}>
+          <Button onPress={onLogin} style={styles.button}>
+            {isLogin ? 'Log in' : 'Create account'}
+          </Button>
+          <Button 
+            onPress={() => setIsLogin(!isLogin)} 
+            variant="secondary" 
+            style={styles.button}
+          >
+            {isLogin ? 'Create account' : 'Log in instead'}
+          </Button>
+        </View>
 
-      {/* Action Buttons */}
-      <div className="space-y-3 mb-6">
-        <Button onClick={onLogin} className="w-full">
-          {isLogin ? 'Log in' : 'Create account'}
-        </Button>
-        <Button 
-          onClick={() => setIsLogin(!isLogin)} 
-          variant="secondary" 
-          className="w-full"
-        >
-          {isLogin ? 'Create account' : 'Log in instead'}
-        </Button>
-      </div>
-
-      {/* Footer */}
-      <div className="flex-1" />
-      <p className="text-center text-gray-500 text-sm pb-12">
-        By continuing, you agree to our Terms of Service and Privacy Policy
-      </p>
-    </div>
+        {/* Footer */}
+        <Text style={styles.footer}>
+          By continuing, you agree to our Terms of Service and Privacy Policy
+        </Text>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 32,
+  },
+  header: {
+    alignItems: 'center',
+    paddingTop: 80,
+    marginBottom: 48,
+  },
+  logoContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 24,
+    backgroundColor: '#14b8a6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#6b7280',
+    marginTop: 8,
+  },
+  form: {
+    gap: 16,
+    marginBottom: 24,
+  },
+  forgotPassword: {
+    alignItems: 'flex-end',
+    marginBottom: 32,
+  },
+  forgotPasswordText: {
+    color: '#14b8a6',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  actions: {
+    gap: 12,
+    marginBottom: 24,
+  },
+  button: {
+    width: '100%',
+  },
+  footer: {
+    textAlign: 'center',
+    color: '#9ca3af',
+    fontSize: 12,
+    paddingVertical: 48,
+  },
+});

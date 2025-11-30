@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ChevronRight, Heart, Calendar, Activity, Utensils } from 'lucide-react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { ChevronRight, Heart, Calendar, Activity, Utensils } from 'lucide-react-native';
 import { Button } from './Button';
 
 interface OnboardingScreenProps {
@@ -39,79 +40,207 @@ export function OnboardingScreen({ onGetStarted }: OnboardingScreenProps) {
   const SlideIcon = slide.icon;
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-b from-teal-50 to-white">
-      <div className="flex-1 flex flex-col items-center justify-center px-8 pb-20">
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.content}>
         {/* Logo/Icon */}
-        <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-teal-500 to-blue-500 flex items-center justify-center mb-8 shadow-lg">
-          <SlideIcon size={48} className="text-white" strokeWidth={2} />
-        </div>
+        <View style={styles.iconContainer}>
+          <SlideIcon size={48} color="#fff" strokeWidth={2} />
+        </View>
 
         {/* Title */}
-        <h1 className="text-center text-gray-900 mb-3">
+        <Text style={styles.title}>
           {slide.title}
-        </h1>
+        </Text>
 
         {/* Subtitle */}
-        <p className="text-center text-gray-600 mb-12 max-w-sm">
+        <Text style={styles.subtitle}>
           {slide.subtitle}
-        </p>
+        </Text>
 
         {/* Features */}
         {slide.features.length > 0 && (
-          <div className="space-y-4 w-full max-w-sm mb-8">
+          <View style={styles.featuresContainer}>
             {slide.features.map((feature, index) => {
               const FeatureIcon = feature.icon;
               return (
-                <div key={index} className="flex items-center gap-4 bg-white rounded-2xl px-5 py-4 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center flex-shrink-0">
-                    <FeatureIcon size={20} className="text-teal-600" />
-                  </div>
-                  <span className="text-gray-700">{feature.text}</span>
-                </div>
+                <View key={index} style={styles.featureItem}>
+                  <View style={styles.featureIconContainer}>
+                    <FeatureIcon size={20} color="#14b8a6" />
+                  </View>
+                  <Text style={styles.featureText}>{feature.text}</Text>
+                </View>
               );
             })}
-          </div>
+          </View>
         )}
-      </div>
+      </ScrollView>
 
       {/* Bottom Actions */}
-      <div className="px-8 pb-12">
+      <View style={styles.bottomContainer}>
         {/* Dots Indicator */}
-        <div className="flex justify-center gap-2 mb-8">
+        <View style={styles.dotsContainer}>
           {slides.map((_, index) => (
-            <div
+            <View
               key={index}
-              className={`h-2 rounded-full transition-all ${
-                index === currentSlide
-                  ? 'w-8 bg-teal-500'
-                  : 'w-2 bg-gray-300'
-              }`}
+              style={[
+                styles.dot,
+                index === currentSlide ? styles.dotActive : styles.dotInactive
+              ]}
             />
           ))}
-        </div>
+        </View>
 
         {currentSlide < slides.length - 1 ? (
-          <button
-            onClick={() => setCurrentSlide(currentSlide + 1)}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-teal-500 text-white shadow-sm transition-all active:scale-95"
+          <TouchableOpacity
+            onPress={() => setCurrentSlide(currentSlide + 1)}
+            style={styles.nextButton}
+            activeOpacity={0.8}
           >
-            <span>Next</span>
-            <ChevronRight size={20} />
-          </button>
+            <Text style={styles.nextButtonText}>Next</Text>
+            <ChevronRight size={20} color="#fff" />
+          </TouchableOpacity>
         ) : (
-          <div className="space-y-3">
-            <Button onClick={onGetStarted} className="w-full">
+          <View style={styles.finalActions}>
+            <Button onPress={onGetStarted} style={styles.getStartedButton}>
               Get Started
             </Button>
-            <button
-              onClick={onGetStarted}
-              className="w-full text-teal-600"
-            >
-              Log in
-            </button>
-          </div>
+            <TouchableOpacity onPress={onGetStarted}>
+              <Text style={styles.loginText}>Log in</Text>
+            </TouchableOpacity>
+          </View>
         )}
-      </div>
-    </div>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0fdfa',
+  },
+  content: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+    paddingBottom: 80,
+  },
+  iconContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 24,
+    backgroundColor: '#14b8a6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 32,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+    color: '#111827',
+    marginBottom: 12,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#6b7280',
+    marginBottom: 48,
+    maxWidth: 320,
+  },
+  featuresContainer: {
+    width: '100%',
+    maxWidth: 320,
+    marginBottom: 32,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  featureIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#ccfbf1',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  featureText: {
+    flex: 1,
+    color: '#374151',
+    fontSize: 15,
+  },
+  bottomContainer: {
+    paddingHorizontal: 32,
+    paddingBottom: 48,
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8,
+    marginBottom: 32,
+  },
+  dot: {
+    height: 8,
+    borderRadius: 4,
+  },
+  dotActive: {
+    width: 32,
+    backgroundColor: '#14b8a6',
+  },
+  dotInactive: {
+    width: 8,
+    backgroundColor: '#d1d5db',
+  },
+  nextButton: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderRadius: 16,
+    backgroundColor: '#14b8a6',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  nextButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  finalActions: {
+    gap: 12,
+  },
+  getStartedButton: {
+    width: '100%',
+  },
+  loginText: {
+    textAlign: 'center',
+    color: '#14b8a6',
+    fontSize: 16,
+    fontWeight: '600',
+    paddingVertical: 12,
+  },
+});

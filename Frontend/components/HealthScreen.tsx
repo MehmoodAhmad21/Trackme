@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Footprints, Heart, Droplets, Moon, TrendingUp, ChevronRight, Dumbbell } from 'lucide-react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Footprints, Heart, Droplets, Moon, TrendingUp, ChevronRight, Dumbbell } from 'lucide-react-native';
 import { BottomNav } from './BottomNav';
+import { VitalCard } from './VitalCard';
 import type { Screen } from '../App';
 
 interface HealthScreenProps {
@@ -8,227 +10,271 @@ interface HealthScreenProps {
 }
 
 export function HealthScreen({ onNavigate }: HealthScreenProps) {
-  const [activeTab, setActiveTab] = useState<'activity' | 'vitals'>('activity');
-
-  const stepsData = [5200, 7800, 6500, 8200, 6342, 4800, 7100];
-  const maxSteps = Math.max(...stepsData);
+  const [selectedTab, setSelectedTab] = useState<'vitals' | 'activity'>('vitals');
 
   return (
-    <div className="h-full bg-gray-50 pb-24">
-      {/* Header */}
-      <div className="bg-white px-6 pt-14 pb-4">
-        <h1 className="text-gray-900 mb-6">Health</h1>
+    <View style={styles.container}>
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Health</Text>
+          
+          {/* Tabs */}
+          <View style={styles.tabs}>
+            <TouchableOpacity
+              style={[styles.tab, selectedTab === 'vitals' && styles.tabActive]}
+              onPress={() => setSelectedTab('vitals')}
+            >
+              <Text style={[styles.tabText, selectedTab === 'vitals' && styles.tabTextActive]}>
+                Vitals
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, selectedTab === 'activity' && styles.tabActive]}
+              onPress={() => setSelectedTab('activity')}
+            >
+              <Text style={[styles.tabText, selectedTab === 'activity' && styles.tabTextActive]}>
+                Activity
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-        {/* Tab Switcher */}
-        <div className="flex gap-2 bg-gray-100 p-1 rounded-xl">
-          <button
-            onClick={() => setActiveTab('activity')}
-            className={`flex-1 py-2 rounded-lg transition-all ${
-              activeTab === 'activity'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600'
-            }`}
-          >
-            Activity
-          </button>
-          <button
-            onClick={() => setActiveTab('vitals')}
-            className={`flex-1 py-2 rounded-lg transition-all ${
-              activeTab === 'vitals'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600'
-            }`}
-          >
-            Vitals
-          </button>
-        </div>
-      </div>
+        <View style={styles.content}>
+          {selectedTab === 'vitals' ? (
+            <>
+              {/* Vitals Grid */}
+              <View style={styles.grid}>
+                <VitalCard icon={<Heart size={20} color="#ef4444" />} label="Heart Rate" value="72" unit="bpm" color="red" />
+                <VitalCard icon={<Droplets size={20} color="#3b82f6" />} label="Glucose" value="95" unit="mg/dL" color="blue" />
+                <VitalCard icon={<Moon size={20} color="#a855f7" />} label="Sleep" value="7h 32m" color="purple" />
+                <VitalCard icon={<TrendingUp size={20} color="#14b8a6" />} label="Weight" value="148" unit="lbs" color="teal" />
+              </View>
 
-      {activeTab === 'activity' ? (
-        <div className="px-6 py-6 space-y-6">
-          {/* Steps Progress */}
-          <div className="bg-white rounded-3xl p-6 shadow-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-teal-100 rounded-2xl flex items-center justify-center">
-                <Footprints size={24} className="text-teal-500" />
-              </div>
-              <div className="flex-1">
-                <p className="text-gray-600 mb-1">Steps Today</p>
-                <p className="text-gray-900">6,342 / 8,000</p>
-              </div>
-            </div>
-            
-            <div className="h-3 bg-gray-100 rounded-full overflow-hidden mb-2">
-              <div
-                className="h-full bg-teal-500 rounded-full transition-all"
-                style={{ width: '79.3%' }}
-              />
-            </div>
-            <p className="text-gray-500">1,658 steps to go</p>
-          </div>
+              {/* Recent Readings */}
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>Recent Readings</Text>
+                {['Heart Rate - 72 bpm', 'Blood Glucose - 95 mg/dL', 'Sleep Duration - 7h 32m'].map((reading, index) => (
+                  <View key={index}>
+                    <View style={styles.readingRow}>
+                      <Text style={styles.readingText}>{reading}</Text>
+                      <Text style={styles.readingTime}>{['2 hours ago', '5 hours ago', 'Yesterday'][index]}</Text>
+                    </View>
+                    {index < 2 && <View style={styles.separator} />}
+                  </View>
+                ))}
+              </View>
+            </>
+          ) : (
+            <>
+              {/* Steps Card */}
+              <View style={styles.stepsCard}>
+                <View style={styles.stepsIcon}>
+                  <Footprints size={32} color="#14b8a6" />
+                </View>
+                <Text style={styles.stepsLabel}>Today's Steps</Text>
+                <Text style={styles.stepsValue}>6,342</Text>
+                <Text style={styles.stepsGoal}>of 8,000 goal</Text>
+                <View style={styles.progressBar}>
+                  <View style={[styles.progressFill, { width: '79%' }]} />
+                </View>
+              </View>
 
-          {/* Weekly Steps Chart */}
-          <div className="bg-white rounded-3xl p-6 shadow-sm">
-            <h3 className="text-gray-900 mb-6">Last 7 Days</h3>
-            <div className="flex items-end justify-between gap-2 h-40">
-              {stepsData.map((steps, index) => {
-                const height = (steps / maxSteps) * 100;
-                const isToday = index === 4;
-                return (
-                  <div key={index} className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full flex items-end justify-center flex-1">
-                      <div
-                        className={`w-full rounded-t-lg transition-all ${
-                          isToday ? 'bg-teal-500' : 'bg-gray-200'
-                        }`}
-                        style={{ height: `${height}%` }}
-                      />
-                    </div>
-                    <p className={`text-xs ${isToday ? 'text-teal-500' : 'text-gray-500'}`}>
-                      {['M', 'T', 'W', 'T', 'F', 'S', 'S'][index]}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Recent Workouts */}
-          <div className="bg-white rounded-3xl p-6 shadow-sm">
-            <h3 className="text-gray-900 mb-4">Recent Workouts</h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-2xl border border-purple-100">
-                <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
-                  <Dumbbell size={24} className="text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-gray-900 mb-1">Strength Training</p>
-                  <p className="text-gray-600">45 minutes • 280 kcal</p>
-                </div>
-                <p className="text-gray-500">Today</p>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-2xl border border-orange-100">
-                <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
-                  <Footprints size={24} className="text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-gray-900 mb-1">Running</p>
-                  <p className="text-gray-600">30 minutes • 320 kcal</p>
-                </div>
-                <p className="text-gray-500">Yesterday</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="px-6 py-6 space-y-4">
-          {/* Vitals Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <VitalCard
-              icon={<Heart size={24} className="text-red-500" />}
-              label="Heart Rate"
-              value="72"
-              unit="bpm"
-              time="10 min ago"
-              color="red"
-              trend={[68, 70, 72, 71, 72]}
-            />
-            <VitalCard
-              icon={<Droplets size={24} className="text-blue-500" />}
-              label="Blood Glucose"
-              value="95"
-              unit="mg/dL"
-              time="2h ago"
-              color="blue"
-              trend={[92, 94, 98, 96, 95]}
-            />
-            <VitalCard
-              icon={<Moon size={24} className="text-purple-500" />}
-              label="Sleep"
-              value="7h 32m"
-              unit=""
-              time="Last night"
-              color="purple"
-              trend={[6.5, 7, 7.5, 7.2, 7.5]}
-            />
-            <VitalCard
-              icon={<TrendingUp size={24} className="text-teal-500" />}
-              label="Weight"
-              value="148"
-              unit="lbs"
-              time="This morning"
-              color="teal"
-              trend={[150, 149, 149, 148, 148]}
-            />
-          </div>
-
-          {/* Blood Pressure */}
-          <div className="bg-white rounded-3xl p-5 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
-                  <Heart size={24} className="text-green-500" />
-                </div>
-                <div>
-                  <p className="text-gray-600 mb-1">Blood Pressure</p>
-                  <p className="text-gray-900">120/80 mmHg</p>
-                </div>
-              </div>
-              <button className="text-teal-500">
-                <ChevronRight size={20} />
-              </button>
-            </div>
-            <p className="text-gray-500">2 hours ago</p>
-          </div>
-        </div>
-      )}
+              {/* Recent Activities */}
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>Recent Activities</Text>
+                {['Morning run - 3.2 km', 'Yoga session - 45 min', 'Evening walk - 2.1 km'].map((activity, index) => (
+                  <View key={index}>
+                    <View style={styles.activityRow}>
+                      <View style={styles.activityIcon}>
+                        <Dumbbell size={20} color="#14b8a6" />
+                      </View>
+                      <View style={styles.activityContent}>
+                        <Text style={styles.activityText}>{activity}</Text>
+                        <Text style={styles.activityTime}>{['Today 7:00 AM', 'Yesterday 6:00 PM', '2 days ago'][index]}</Text>
+                      </View>
+                      <ChevronRight size={20} color="#9ca3af" />
+                    </View>
+                    {index < 2 && <View style={styles.separator} />}
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
+        </View>
+      </ScrollView>
 
       <BottomNav activeTab="health" onNavigate={onNavigate} />
-    </div>
+    </View>
   );
 }
 
-interface VitalCardProps {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  unit: string;
-  time: string;
-  color: string;
-  trend: number[];
-}
-
-function VitalCard({ icon, label, value, unit, time, color, trend }: VitalCardProps) {
-  const max = Math.max(...trend);
-  const min = Math.min(...trend);
-  const range = max - min || 1;
-
-  return (
-    <div className={`bg-white rounded-3xl p-4 shadow-sm border border-${color}-100`}>
-      <div className={`w-10 h-10 bg-${color}-100 rounded-xl flex items-center justify-center mb-3`}>
-        {icon}
-      </div>
-      <p className="text-gray-600 mb-1">{label}</p>
-      <p className="text-gray-900 mb-1">
-        {value} {unit && <span className="text-gray-500">{unit}</span>}
-      </p>
-      
-      {/* Mini trend line */}
-      <div className="flex items-end gap-0.5 h-8 mb-2">
-        {trend.map((val, index) => {
-          const height = ((val - min) / range) * 100;
-          return (
-            <div
-              key={index}
-              className={`flex-1 bg-${color}-500 rounded-sm`}
-              style={{ height: `${Math.max(height, 20)}%` }}
-            />
-          );
-        })}
-      </div>
-      
-      <p className="text-gray-400">{time}</p>
-    </div>
-  );
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f9fafb',
+  },
+  scroll: {
+    flex: 1,
+  },
+  header: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 24,
+    paddingTop: 56,
+    paddingBottom: 16,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 20,
+  },
+  tabs: {
+    flexDirection: 'row',
+    backgroundColor: '#f3f4f6',
+    borderRadius: 12,
+    padding: 4,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  tabActive: {
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  tabText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#6b7280',
+  },
+  tabTextActive: {
+    color: '#111827',
+  },
+  content: {
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    gap: 16,
+    paddingBottom: 120,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 16,
+  },
+  readingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  readingText: {
+    fontSize: 15,
+    color: '#111827',
+  },
+  readingTime: {
+    fontSize: 13,
+    color: '#6b7280',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#f3f4f6',
+  },
+  stepsCard: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 24,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  stepsIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#ccfbf1',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  stepsLabel: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginBottom: 8,
+  },
+  stepsValue: {
+    fontSize: 48,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  stepsGoal: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginBottom: 16,
+  },
+  progressBar: {
+    width: '100%',
+    height: 8,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#14b8a6',
+    borderRadius: 4,
+  },
+  activityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 12,
+  },
+  activityIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#ccfbf1',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activityContent: {
+    flex: 1,
+  },
+  activityText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  activityTime: {
+    fontSize: 13,
+    color: '#6b7280',
+  },
+});

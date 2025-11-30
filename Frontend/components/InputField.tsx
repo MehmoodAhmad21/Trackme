@@ -1,26 +1,61 @@
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+
 interface InputFieldProps {
-  type?: string;
   placeholder: string;
   label?: string;
   value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeText?: (text: string) => void;
+  secureTextEntry?: boolean;
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
 }
 
-export function InputField({ type = 'text', placeholder, label, value, onChange }: InputFieldProps) {
+export function InputField({ 
+  placeholder, 
+  label, 
+  value, 
+  onChangeText,
+  secureTextEntry = false,
+  keyboardType = 'default'
+}: InputFieldProps) {
   return (
-    <div className="w-full">
+    <View style={styles.container}>
       {label && (
-        <label className="block text-gray-700 mb-2 ml-1">
+        <Text style={styles.label}>
           {label}
-        </label>
+        </Text>
       )}
-      <input
-        type={type}
+      <TextInput
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
-        className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+        onChangeText={onChangeText}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        style={styles.input}
+        placeholderTextColor="#9ca3af"
       />
-    </div>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  label: {
+    color: '#374151',
+    marginBottom: 8,
+    marginLeft: 4,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  input: {
+    width: '100%',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 16,
+    fontSize: 16,
+  },
+});

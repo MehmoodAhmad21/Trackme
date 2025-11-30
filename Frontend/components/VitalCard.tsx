@@ -1,3 +1,5 @@
+import { View, Text, StyleSheet } from 'react-native';
+
 interface VitalCardProps {
   icon: React.ReactNode;
   label: string;
@@ -6,25 +8,69 @@ interface VitalCardProps {
   color?: string;
 }
 
+const colorMap: Record<string, string> = {
+  teal: '#ccfbf1',
+  red: '#fee2e2',
+  blue: '#dbeafe',
+  purple: '#e9d5ff',
+  green: '#d1fae5',
+};
+
 export function VitalCard({ icon, label, value, unit, color = 'teal' }: VitalCardProps) {
-  const colorClasses = {
-    teal: 'bg-teal-100',
-    red: 'bg-red-100',
-    blue: 'bg-blue-100',
-    purple: 'bg-purple-100',
-    green: 'bg-green-100',
-  };
+  const bgColor = colorMap[color] || colorMap.teal;
 
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-      <div className={`w-10 h-10 rounded-xl ${colorClasses[color as keyof typeof colorClasses] || colorClasses.teal} flex items-center justify-center mb-3`}>
+    <View style={styles.container}>
+      <View style={[styles.iconContainer, { backgroundColor: bgColor }]}>
         {icon}
-      </div>
-      <p className="text-gray-600 mb-1">{label}</p>
-      <div className="flex items-baseline gap-1">
-        <span className="text-gray-900">{value}</span>
-        {unit && <span className="text-gray-500">{unit}</span>}
-      </div>
-    </div>
+      </View>
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.valueContainer}>
+        <Text style={styles.value}>{value}</Text>
+        {unit && <Text style={styles.unit}>{unit}</Text>}
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#f3f4f6',
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  label: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginBottom: 4,
+  },
+  valueContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 4,
+  },
+  value: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  unit: {
+    fontSize: 14,
+    color: '#6b7280',
+  },
+});
